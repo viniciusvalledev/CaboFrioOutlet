@@ -1,0 +1,39 @@
+{
+  "name": "urban-ecommerce",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n client,server -c blue,green \"npm:dev:client\" \"npm:dev:server\"",
+    "dev:client": "npm --prefix client start",
+    "dev:server": "tsx watch server/index.ts",
+    "build": "npm --prefix client run build && tsc -p server/tsconfig.json --noEmit",
+    "preview": "tsx server/index.ts",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx server/seed.ts",
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.2.0",
+    "sharp": "^0.35.3"
+  },
+  "devDependencies": {
+    "@prisma/client": "^6.19.3",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^26.1.2",
+    "concurrently": "^10.0.4",
+    "prisma": "^6.19.3",
+    "tsx": "^4.23.1",
+    "typescript": "^5.7.2"
+  }
+}

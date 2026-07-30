@@ -1,0 +1,10 @@
+<input
+  type="number"
+  min="0"
+  [value]="draft()"
+  [disabled]="saving()"
+  (input)="onDraftChange($any($event.target).value)"
+  (blur)="commit()"
+  (keydown)="onKeydown($event)"
+  class="w-12 rounded-full bg-slate-950 px-1.5 py-0.5 text-center text-white focus:outline-none disabled:opacity-50"
+/>

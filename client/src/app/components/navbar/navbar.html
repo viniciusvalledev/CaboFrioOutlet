@@ -1,0 +1,125 @@
+<header class="w-full bg-black/95 backdrop-blur-md">
+  <div class="mx-auto flex h-20 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+    <a href="#" class="flex flex-shrink-0 items-center gap-2.5 text-white">
+      <span class="flex h-9 w-9 items-center justify-center rounded-full border border-slate-700 text-[11px] font-black tracking-tight">
+        {{ storeInitials(settingsService.settings().storeName) }}
+      </span>
+      <span class="hidden text-lg font-black tracking-tighter sm:inline">
+        {{ wordmark().lead ? wordmark().lead + ' ' : '' }}
+        <span class="text-yellow-400">{{ wordmark().accent }}</span>
+      </span>
+    </a>
+
+    <nav class="hidden flex-1 items-center justify-center gap-8 md:flex">
+      <button
+        (click)="handleHomeClick()"
+        class="group relative py-1 text-sm font-semibold uppercase tracking-wide transition-colors duration-300"
+        [class]="activeCategory() === 'todos' ? 'text-white' : 'text-slate-500 hover:text-white'"
+      >
+        Início
+        <span
+          class="absolute -bottom-0.5 left-0 h-0.5 bg-yellow-400 transition-all duration-300"
+          [class]="activeCategory() === 'todos' ? 'w-full' : 'w-0 group-hover:w-full'"
+        ></span>
+      </button>
+      @for (cat of categories; track cat.value) {
+        <button
+          (click)="handleCategoryClick(cat.value)"
+          class="group relative py-1 text-sm font-semibold uppercase tracking-wide transition-colors duration-300"
+          [class]="activeCategory() === cat.value ? 'text-white' : 'text-slate-500 hover:text-white'"
+        >
+          {{ cat.label }}
+          <span
+            class="absolute -bottom-0.5 left-0 h-0.5 bg-yellow-400 transition-all duration-300"
+            [class]="activeCategory() === cat.value ? 'w-full' : 'w-0 group-hover:w-full'"
+          ></span>
+        </button>
+      }
+    </nav>
+
+    <div class="flex flex-shrink-0 items-center gap-1">
+      <button
+        (click)="toggleSearch()"
+        class="flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 hover:bg-slate-900"
+        aria-label="Buscar produtos"
+      >
+        <lucide-icon [img]="searchOpen() ? X : Search" class="h-5 w-5 text-white" />
+      </button>
+
+      <button
+        (click)="showAccountToast()"
+        class="hidden h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 hover:bg-slate-900 sm:flex"
+        aria-label="Minha conta"
+      >
+        <lucide-icon [img]="User" class="h-5 w-5 text-white" />
+      </button>
+
+      <button
+        (click)="cartService.openCart()"
+        class="relative flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 hover:bg-slate-900"
+        aria-label="Abrir carrinho"
+      >
+        <lucide-icon [img]="ShoppingBag" class="h-5 w-5 text-white" />
+        @if (cartService.totalItems() > 0) {
+          <span class="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-yellow-400 text-[9px] font-bold text-slate-900">
+            {{ cartService.totalItems() > 9 ? '9+' : cartService.totalItems() }}
+          </span>
+        }
+      </button>
+
+      <button
+        (click)="toggleMobileMenu()"
+        class="flex h-10 w-10 items-center justify-center rounded-full md:hidden hover:bg-slate-900 transition-colors duration-300"
+        aria-label="Abrir menu"
+      >
+        <lucide-icon [img]="mobileMenuOpen() ? X : Menu" class="h-5 w-5 text-white" />
+      </button>
+    </div>
+  </div>
+
+  @if (searchOpen()) {
+    <div class="border-t border-slate-800 px-4 py-3 sm:px-6 lg:px-8 animate-fade-in">
+      <div class="mx-auto flex max-w-7xl items-center gap-3">
+        <lucide-icon [img]="Search" class="h-4 w-4 flex-shrink-0 text-slate-500" />
+        <input
+          autofocus
+          type="text"
+          [value]="searchQuery()"
+          (input)="searchChange.emit($any($event.target).value)"
+          placeholder="Buscar produtos..."
+          class="flex-1 bg-transparent text-sm text-white placeholder:text-slate-600 focus:outline-none"
+        />
+        @if (searchQuery()) {
+          <button
+            (click)="searchChange.emit('')"
+            class="flex-shrink-0 text-slate-500 transition-colors duration-300 hover:text-white"
+            aria-label="Limpar busca"
+          >
+            <lucide-icon [img]="X" class="h-4 w-4" />
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @if (mobileMenuOpen()) {
+    <nav class="flex flex-col border-t border-slate-800 bg-black md:hidden animate-fade-in">
+      <button
+        (click)="handleHomeClick()"
+        class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wide transition-colors duration-300"
+        [class]="activeCategory() === 'todos' ? 'bg-slate-900 text-white' : 'text-slate-500'"
+      >
+        Início
+      </button>
+      @for (cat of categories; track cat.value) {
+        <button
+          (click)="handleCategoryClick(cat.value)"
+          class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wide transition-colors duration-300"
+          [class]="activeCategory() === cat.value ? 'bg-slate-900 text-white' : 'text-slate-500'"
+        >
+          {{ cat.label }}
+        </button>
+      }
+    </nav>
+  }
+</header>

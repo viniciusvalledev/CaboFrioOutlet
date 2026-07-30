@@ -1,0 +1,10 @@
+<div class="overflow-hidden bg-yellow-400 py-2">
+  <div class="flex w-max animate-marquee whitespace-nowrap hover:[animation-play-state:paused]">
+    @for (msg of loop(); track $index) {
+      <span class="flex flex-shrink-0 items-center gap-3 px-6 text-[11px] font-bold uppercase tracking-widest text-slate-900 sm:text-xs">
+        {{ msg }}
+        <span class="h-1 w-1 flex-shrink-0 rounded-full bg-slate-900"></span>
+      </span>
+    }
+  </div>
+</div>

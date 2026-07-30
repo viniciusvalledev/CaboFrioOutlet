@@ -1,0 +1,131 @@
+<div
+  class="fixed inset-0 z-[60] bg-slate-900/50 transition-opacity duration-300"
+  [class]="cartService.isCartOpen() ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
+  (click)="cartService.closeCart()"
+  aria-hidden="true"
+></div>
+
+<aside
+  class="fixed right-0 top-0 z-[70] flex h-full w-full max-w-md flex-col bg-black border-l border-slate-800 shadow-2xl transition-transform duration-300"
+  [class]="cartService.isCartOpen() ? 'translate-x-0' : 'translate-x-full'"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Carrinho de compras"
+>
+  <div class="flex items-center justify-between border-b border-slate-800 px-5 py-4">
+    <h2 class="flex items-center gap-2 text-base font-bold text-white">
+      <lucide-icon [img]="ShoppingBag" class="h-5 w-5" />
+      Seu Carrinho
+    </h2>
+    <button
+      (click)="cartService.closeCart()"
+      class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition-colors duration-300 hover:bg-slate-800 hover:text-white"
+      aria-label="Fechar carrinho"
+    >
+      <lucide-icon [img]="X" class="h-5 w-5" />
+    </button>
+  </div>
+
+  @if (cartService.items().length === 0) {
+    <div class="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
+      <lucide-icon [img]="ShoppingBag" class="h-12 w-12 text-slate-700" />
+      <p class="text-sm font-medium text-slate-400">Seu carrinho está vazio.</p>
+      <button
+        (click)="cartService.closeCart()"
+        class="mt-2 rounded-full bg-yellow-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition-all duration-300 hover:bg-yellow-500"
+      >
+        Continuar comprando
+      </button>
+    </div>
+  } @else {
+    <div class="flex-1 overflow-y-auto px-5 py-4">
+      <ul class="flex flex-col gap-4">
+        @for (item of cartService.items(); track item.product.id + '-' + item.selectedSize) {
+          <li class="flex gap-3 border-b border-slate-800 pb-4">
+            <img
+              [src]="item.product.image"
+              [alt]="item.product.name"
+              class="h-20 w-16 flex-shrink-0 rounded-md object-cover"
+            />
+            <div class="flex flex-1 flex-col">
+              <div class="flex items-start justify-between gap-2">
+                <p class="text-sm font-semibold leading-snug text-white">
+                  {{ item.product.name }}
+                </p>
+                <button
+                  (click)="cartService.removeFromCart(item.product.id, item.selectedSize)"
+                  class="flex-shrink-0 text-slate-400 transition-colors duration-300 hover:text-red-500"
+                  aria-label="Remover item"
+                >
+                  <lucide-icon [img]="Trash2" class="h-4 w-4" />
+                </button>
+              </div>
+              <p class="text-xs text-slate-400">Tamanho: {{ item.selectedSize }}</p>
+
+              <div class="mt-2 flex items-center justify-between">
+                <div class="flex items-center gap-1 rounded-full border border-slate-700 px-1">
+                  <button
+                    (click)="cartService.updateQuantity(item.product.id, item.selectedSize, item.quantity - 1)"
+                    class="flex h-7 w-7 items-center justify-center text-slate-400 transition-colors duration-300 hover:text-white"
+                    aria-label="Diminuir quantidade"
+                  >
+                    <lucide-icon [img]="Minus" class="h-3.5 w-3.5" />
+                  </button>
+                  <span class="w-6 text-center text-xs font-semibold text-white">
+                    {{ item.quantity }}
+                  </span>
+                  <button
+                    (click)="cartService.updateQuantity(item.product.id, item.selectedSize, item.quantity + 1)"
+                    class="flex h-7 w-7 items-center justify-center text-slate-400 transition-colors duration-300 hover:text-white"
+                    aria-label="Aumentar quantidade"
+                  >
+                    <lucide-icon [img]="Plus" class="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <span class="text-sm font-bold text-white">
+                  {{ formatPrice(getDiscountedPrice(item.product) * item.quantity) }}
+                </span>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (cartService.items().length > 0) {
+    <form (submit)="handleCheckout($event)" class="border-t border-slate-800 px-5 py-4">
+      <div class="mb-4 flex items-center justify-between">
+        <span class="text-sm font-medium text-slate-500">Total</span>
+        <span class="text-xl font-black text-white">
+          {{ formatPrice(cartService.totalPrice()) }}
+        </span>
+      </div>
+
+      <div class="mb-3 flex flex-col gap-2">
+        <input
+          [value]="customerName()"
+          (input)="customerName.set($any($event.target).value)"
+          placeholder="Seu nome"
+          required
+          class="w-full rounded-full border border-slate-700 bg-transparent px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-yellow-400 focus:outline-none"
+        />
+        <input
+          [value]="customerContact()"
+          (input)="customerContact.set($any($event.target).value)"
+          placeholder="WhatsApp ou e-mail"
+          required
+          class="w-full rounded-full border border-slate-700 bg-transparent px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-yellow-400 focus:outline-none"
+        />
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="submitting()"
+        class="w-full rounded-full bg-yellow-400 py-3.5 text-sm font-bold uppercase tracking-wide text-slate-900 transition-all duration-300 hover:bg-yellow-500 disabled:opacity-60"
+      >
+        {{ submitting() ? 'Enviando...' : 'Finalizar Compra' }}
+      </button>
+    </form>
+  }
+</aside>

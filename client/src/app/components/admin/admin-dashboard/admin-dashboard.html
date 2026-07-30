@@ -1,0 +1,57 @@
+<div class="min-h-screen bg-black">
+  <header class="border-b border-slate-800">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-2.5 text-white">
+        <span class="flex h-9 w-9 items-center justify-center rounded-full border border-slate-700 text-[11px] font-black tracking-tight">
+          {{ storeInitials(settingsService.settings().storeName) }}
+        </span>
+        <div>
+          <p class="text-sm font-black leading-none tracking-tighter">
+            {{ wordmark().lead ? wordmark().lead + ' ' : '' }}
+            <span class="text-yellow-400">{{ wordmark().accent }}</span>
+          </p>
+          <p class="mt-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Painel Admin</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a
+          routerLink="/"
+          class="rounded-full border border-slate-700 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition-colors duration-300 hover:border-white"
+        >
+          Ver loja
+        </a>
+        <button
+          (click)="logout()"
+          aria-label="Sair"
+          class="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition-colors duration-300 hover:bg-slate-900 hover:text-white"
+        >
+          <lucide-icon [img]="LogOut" class="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+
+    <div class="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 pb-4 sm:px-6 lg:px-8">
+      @for (tab of tabs; track tab.key) {
+        <button
+          (click)="activeTab.set(tab.key)"
+          class="flex-shrink-0 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wide transition-colors duration-300"
+          [class]="activeTab() === tab.key
+            ? 'bg-white text-black'
+            : 'border border-slate-700 text-slate-400 hover:border-white hover:text-white'"
+        >
+          {{ tab.label }}
+        </button>
+      }
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+    @switch (activeTab()) {
+      @case ('produtos') { <app-products-tab /> }
+      @case ('estoque') { <app-stock-tab /> }
+      @case ('pedidos') { <app-orders-tab /> }
+      @case ('configuracoes') { <app-settings-tab /> }
+    }
+  </main>
+</div>

@@ -1,0 +1,75 @@
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ProductService } from '../../services/product.service';
+import { SettingsService } from '../../services/settings.service';
+import { ProductCategory } from '../../types/product';
+import { Navbar } from '../../components/navbar/navbar';
+import { AnnouncementBar } from '../../components/announcement-bar/announcement-bar';
+import { Hero } from '../../components/hero/hero';
+import { CategoryShowcase } from '../../components/category-showcase/category-showcase';
+import { CategoryFilter } from '../../components/category-filter/category-filter';
+import { ProductGrid } from '../../components/product-grid/product-grid';
+import { BrandBanner } from '../../components/brand-banner/brand-banner';
+import { CartDrawer } from '../../components/cart-drawer/cart-drawer';
+import { Footer } from '../../components/footer/footer';
+
+type CategoryOrAll = ProductCategory | 'todos';
+
+@Component({
+  selector: 'app-storefront-page',
+  imports: [
+    Navbar,
+    AnnouncementBar,
+    Hero,
+    CategoryShowcase,
+    CategoryFilter,
+    ProductGrid,
+    BrandBanner,
+    CartDrawer,
+    Footer,
+  ],
+  templateUrl: './storefront-page.html',
+})
+export class StorefrontPage {
+  private productService = inject(ProductService);
+  private settingsService = inject(SettingsService);
+  private titleService = inject(Title);
+
+  readonly products = this.productService.products;
+  readonly loading = this.productService.loading;
+
+  activeCategory = signal<CategoryOrAll>('todos');
+  searchQuery = signal('');
+
+  constructor() {
+    effect(() => {
+      this.titleService.setTitle(`${this.settingsService.settings().storeName} — Vestuário Urbano`);
+    });
+  }
+
+  readonly filteredProducts = computed(() => {
+    const products = this.products();
+    const category = this.activeCategory();
+    let list = category === 'todos' ? products : products.filter((p) => p.category === category);
+    const query = this.searchQuery().trim().toLowerCase();
+    if (query) {
+      list = list.filter((p) => p.name.toLowerCase().includes(query));
+    }
+    return list;
+  });
+
+  readonly categoryCounts = computed(() => {
+    const products = this.products();
+    const counts: Record<CategoryOrAll, number> = {
+      todos: products.length,
+      camisas: 0,
+      calças: 0,
+      bermudas: 0,
+      bonés: 0,
+    };
+    products.forEach((p) => {
+      counts[p.category] += 1;
+    });
+    return counts;
+  });
+}

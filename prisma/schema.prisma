@@ -1,0 +1,68 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Product {
+  id              String        @id @default(cuid())
+  name            String
+  price           Float
+  category        String
+  image           String
+  description     String        @db.Text
+  isNew           Boolean       @default(false)
+  discountPercent Float?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  sizes           ProductSize[]
+  orderItems      OrderItem[]
+}
+
+model ProductSize {
+  id        String  @id @default(cuid())
+  size      String
+  stock     Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+
+  @@unique([productId, size])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  customerName    String
+  customerContact String
+  total           Float
+  status          String      @default("pendente")
+  createdAt       DateTime    @default(now())
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     String
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId   String?
+  productName String
+  image       String
+  size        String
+  quantity    Int
+  unitPrice   Float
+}
+
+model Settings {
+  id                    Int    @id @default(1)
+  storeName             String @default("Cabo Frio Outlet")
+  freeShippingThreshold Float  @default(299)
+  announcementMessages  String @db.Text
+}
+
+model Admin {
+  id           Int    @id @default(1)
+  passwordHash String
+}

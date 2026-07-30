@@ -1,0 +1,46 @@
+<div>
+  <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-2xl font-black tracking-tight text-white">Produtos</h1>
+      <p class="mt-1 text-sm text-slate-500">
+        Gerencie o catálogo da loja — adicione fotos, preços e tamanhos.
+      </p>
+    </div>
+    <button
+      (click)="openCreateForm()"
+      class="flex items-center justify-center gap-2 rounded-full bg-yellow-400 px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-900 transition-colors duration-300 hover:bg-white"
+    >
+      <lucide-icon [img]="Plus" class="h-4 w-4" />
+      Novo produto
+    </button>
+  </div>
+
+  <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <app-stat-card [icon]="Package" label="Produtos" [value]="stats().total" />
+    <app-stat-card [icon]="Sparkles" label="Novidades" [value]="stats().novidades" />
+    <app-stat-card [icon]="Tag" label="Em promoção" [value]="stats().promocoes" />
+  </div>
+
+  @if (productService.loading()) {
+    <p class="py-20 text-center text-sm text-slate-500">Carregando produtos...</p>
+  } @else {
+    <app-product-table
+      [products]="productService.products()"
+      (edit)="openEditForm($event)"
+      (delete)="handleDelete($event)"
+    />
+  }
+
+  <p class="mt-6 text-xs text-slate-600">
+    O catálogo, o estoque e as fotos ficam salvos em um banco de dados real no servidor —
+    acessível de qualquer navegador que aponte para esta API.
+  </p>
+
+  @if (formOpen()) {
+    <app-product-form
+      [product]="editingProduct()"
+      (formSubmit)="handleSubmit($event)"
+      (formClose)="formOpen.set(false)"
+    />
+  }
+</div>
