@@ -19,6 +19,7 @@ function serializeProduct(product: ProductWithSizes) {
     name: product.name,
     price: product.price,
     category: product.category,
+    brand: product.brand ?? undefined,
     image: product.image,
     description: product.description,
     isNew: product.isNew,
@@ -32,6 +33,7 @@ interface ProductPayload {
   name: string;
   price: number;
   category: string;
+  brand?: string;
   image: string;
   description: string;
   sizes: string[];
@@ -69,13 +71,14 @@ productsRouter.post('/', requireAdmin, async (req, res) => {
   if (!validatePayload(req.body)) {
     return res.status(400).json({ error: 'Dados do produto inválidos.' });
   }
-  const { name, price, category, image, description, sizes, stock, discountPercent, isNew } = req.body as ProductPayload;
+  const { name, price, category, brand, image, description, sizes, stock, discountPercent, isNew } = req.body as ProductPayload;
 
   const product = await prisma.product.create({
     data: {
       name: name.trim(),
       price,
       category,
+      brand: brand?.trim() || null,
       image,
       description: description?.trim() ?? '',
       isNew: Boolean(isNew),
@@ -95,7 +98,7 @@ productsRouter.put('/:id', requireAdmin, async (req, res) => {
     return res.status(400).json({ error: 'Dados do produto inválidos.' });
   }
   const id = req.params.id as string;
-  const { name, price, category, image, description, sizes, stock, discountPercent, isNew } = req.body as ProductPayload;
+  const { name, price, category, brand, image, description, sizes, stock, discountPercent, isNew } = req.body as ProductPayload;
 
   try {
     await prisma.$transaction([
@@ -113,6 +116,7 @@ productsRouter.put('/:id', requireAdmin, async (req, res) => {
           name: name.trim(),
           price,
           category,
+          brand: brand?.trim() || null,
           image,
           description: description?.trim() ?? '',
           isNew: Boolean(isNew),

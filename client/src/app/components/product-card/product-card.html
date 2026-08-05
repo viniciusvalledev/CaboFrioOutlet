@@ -1,4 +1,4 @@
-<div class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800 bg-black transition-all duration-300 hover:-translate-y-1 hover:border-slate-600">
+<div class="group flex flex-col overflow-hidden rounded-sm border border-slate-800 bg-black transition-all duration-300 hover:-translate-y-1 hover:border-accent/60">
   <div class="relative aspect-[4/5] overflow-hidden bg-slate-900">
     <img
       [src]="product().image"
@@ -11,17 +11,17 @@
 
     <div class="absolute top-3 left-3 flex flex-col gap-1.5">
       @if (isOutOfStock()) {
-        <span class="rounded-full bg-red-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+        <span class="rounded-sm bg-red-500 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wide text-white">
           Esgotado
         </span>
       } @else {
         @if (product().isNew) {
-          <span class="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-black">
+          <span class="rounded-sm bg-white px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wide text-black">
             Novo
           </span>
         }
         @if (hasDiscount()) {
-          <span class="rounded-full bg-yellow-400 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-900">
+          <span class="rounded-sm bg-accent px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wide text-black">
             -{{ product().discountPercent }}%
           </span>
         }
@@ -31,7 +31,7 @@
     <button
       (click)="handleAddToCart()"
       [disabled]="!canAddToCart()"
-      class="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-md opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-0 sm:flex"
+      class="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-sm bg-white text-black shadow-md opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-0 sm:flex"
       aria-label="Adicionar ao carrinho"
     >
       <lucide-icon [img]="Plus" class="h-5 w-5" />
@@ -39,7 +39,7 @@
   </div>
 
   <div class="flex flex-1 flex-col p-4">
-    <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+    <span class="font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-500">
       {{ product().category }}
     </span>
     <h3 class="mt-1 text-sm font-bold text-white leading-snug">
@@ -47,11 +47,11 @@
     </h3>
 
     <div class="mt-2 flex items-baseline gap-2">
-      <span class="text-lg font-black text-white">
+      <span class="font-mono text-lg font-bold tabular-nums text-white">
         {{ formatPrice(finalPrice()) }}
       </span>
       @if (hasDiscount()) {
-        <span class="text-xs text-slate-500 line-through">
+        <span class="font-mono text-xs tabular-nums text-slate-500 line-through">
           {{ formatPrice(product().price) }}
         </span>
       }
@@ -65,12 +65,12 @@
         <button
           (click)="selectSize(size)"
           [disabled]="!isSizeAvailable(size)"
-          class="rounded-full border px-2.5 py-1 text-[11px] font-semibold transition-all duration-300"
+          class="rounded-sm border px-2.5 py-1 font-mono text-[11px] font-semibold transition-all duration-300"
           [class]="!isSizeAvailable(size)
             ? 'cursor-not-allowed border-slate-800 text-slate-700 line-through'
             : selectedSize() === size
               ? 'border-white bg-white text-black'
-              : 'border-slate-700 text-slate-400 hover:border-white hover:text-white'"
+              : 'border-slate-700 text-slate-400 hover:border-accent hover:text-accent'"
         >
           {{ size }}
         </button>
@@ -80,7 +80,7 @@
     <button
       (click)="handleAddToCart()"
       [disabled]="!canAddToCart()"
-      class="mt-4 flex items-center justify-center gap-2 rounded-full bg-white py-2.5 text-xs font-bold uppercase tracking-wide text-black transition-all duration-300 hover:bg-yellow-400 hover:text-slate-900 disabled:cursor-not-allowed disabled:border disabled:border-slate-700 disabled:bg-transparent disabled:text-slate-600 disabled:hover:bg-transparent disabled:hover:text-slate-600"
+      class="mt-4 flex items-center justify-center gap-2 rounded-sm bg-white py-2.5 text-xs font-bold uppercase tracking-wide text-black transition-all duration-300 hover:bg-accent hover:text-black disabled:cursor-not-allowed disabled:border disabled:border-slate-700 disabled:bg-transparent disabled:text-slate-600 disabled:hover:bg-transparent disabled:hover:text-slate-600"
     >
       <lucide-icon [img]="Plus" class="h-3.5 w-3.5" />
       {{ isOutOfStock() ? 'Esgotado' : 'Adicionar ao Carrinho' }}

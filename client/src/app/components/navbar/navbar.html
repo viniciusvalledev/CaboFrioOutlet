@@ -1,12 +1,12 @@
 <header class="w-full bg-black/95 backdrop-blur-md">
   <div class="mx-auto flex h-20 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
     <a href="#" class="flex flex-shrink-0 items-center gap-2.5 text-white">
-      <span class="flex h-9 w-9 items-center justify-center rounded-full border border-slate-700 text-[11px] font-black tracking-tight">
+      <span class="flex h-9 w-9 items-center justify-center rounded-sm border border-accent/50 text-[11px] font-mono font-bold tracking-tight text-accent">
         {{ storeInitials(settingsService.settings().storeName) }}
       </span>
-      <span class="hidden text-lg font-black tracking-tighter sm:inline">
+      <span class="hidden font-display text-lg font-semibold uppercase tracking-tight sm:inline">
         {{ wordmark().lead ? wordmark().lead + ' ' : '' }}
-        <span class="text-yellow-400">{{ wordmark().accent }}</span>
+        <span class="text-accent">{{ wordmark().accent }}</span>
       </span>
     </a>
 
@@ -18,7 +18,7 @@
       >
         Início
         <span
-          class="absolute -bottom-0.5 left-0 h-0.5 bg-yellow-400 transition-all duration-300"
+          class="absolute -bottom-0.5 left-0 h-0.5 bg-accent transition-all duration-300"
           [class]="activeCategory() === 'todos' ? 'w-full' : 'w-0 group-hover:w-full'"
         ></span>
       </button>
@@ -30,7 +30,7 @@
         >
           {{ cat.label }}
           <span
-            class="absolute -bottom-0.5 left-0 h-0.5 bg-yellow-400 transition-all duration-300"
+            class="absolute -bottom-0.5 left-0 h-0.5 bg-accent transition-all duration-300"
             [class]="activeCategory() === cat.value ? 'w-full' : 'w-0 group-hover:w-full'"
           ></span>
         </button>
@@ -40,7 +40,7 @@
     <div class="flex flex-shrink-0 items-center gap-1">
       <button
         (click)="toggleSearch()"
-        class="flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 hover:bg-slate-900"
+        class="flex h-10 w-10 items-center justify-center rounded-sm transition-colors duration-300 hover:bg-slate-900"
         aria-label="Buscar produtos"
       >
         <lucide-icon [img]="searchOpen() ? X : Search" class="h-5 w-5 text-white" />
@@ -48,7 +48,7 @@
 
       <button
         (click)="showAccountToast()"
-        class="hidden h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 hover:bg-slate-900 sm:flex"
+        class="hidden h-10 w-10 items-center justify-center rounded-sm transition-colors duration-300 hover:bg-slate-900 sm:flex"
         aria-label="Minha conta"
       >
         <lucide-icon [img]="User" class="h-5 w-5 text-white" />
@@ -56,12 +56,12 @@
 
       <button
         (click)="cartService.openCart()"
-        class="relative flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 hover:bg-slate-900"
+        class="relative flex h-10 w-10 items-center justify-center rounded-sm transition-colors duration-300 hover:bg-slate-900"
         aria-label="Abrir carrinho"
       >
         <lucide-icon [img]="ShoppingBag" class="h-5 w-5 text-white" />
         @if (cartService.totalItems() > 0) {
-          <span class="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-yellow-400 text-[9px] font-bold text-slate-900">
+          <span class="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-sm bg-accent font-mono text-[9px] font-bold text-black">
             {{ cartService.totalItems() > 9 ? '9+' : cartService.totalItems() }}
           </span>
         }
@@ -69,7 +69,7 @@
 
       <button
         (click)="toggleMobileMenu()"
-        class="flex h-10 w-10 items-center justify-center rounded-full md:hidden hover:bg-slate-900 transition-colors duration-300"
+        class="flex h-10 w-10 items-center justify-center rounded-sm md:hidden hover:bg-slate-900 transition-colors duration-300"
         aria-label="Abrir menu"
       >
         <lucide-icon [img]="mobileMenuOpen() ? X : Menu" class="h-5 w-5 text-white" />

@@ -12,6 +12,10 @@ function totalStockOf(stock: Record<string, number>): number {
   return Object.values(stock).reduce((sum, qty) => sum + qty, 0);
 }
 
+function stockOf(stock: Record<string, number>, size: string): number {
+  return stock[size] ?? 0;
+}
+
 @Component({
   selector: 'app-stock-tab',
   imports: [LucideAngularModule, StatCard, StockInput],
@@ -26,6 +30,7 @@ export class StockTab {
   readonly CircleX = CircleX;
   readonly LOW_STOCK_THRESHOLD = LOW_STOCK_THRESHOLD;
   readonly totalStockOf = totalStockOf;
+  readonly stockOf = stockOf;
 
   readonly stats = computed(() => {
     const totals = this.productService.products().map((p) => totalStockOf(p.stock));

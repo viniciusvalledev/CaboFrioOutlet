@@ -6,7 +6,7 @@ import { ProductCategory } from '../../types/product';
 import { Navbar } from '../../components/navbar/navbar';
 import { AnnouncementBar } from '../../components/announcement-bar/announcement-bar';
 import { Hero } from '../../components/hero/hero';
-import { CategoryShowcase } from '../../components/category-showcase/category-showcase';
+import { BrandShowcase } from '../../components/brand-showcase/brand-showcase';
 import { CategoryFilter } from '../../components/category-filter/category-filter';
 import { ProductGrid } from '../../components/product-grid/product-grid';
 import { BrandBanner } from '../../components/brand-banner/brand-banner';
@@ -21,7 +21,7 @@ type CategoryOrAll = ProductCategory | 'todos';
     Navbar,
     AnnouncementBar,
     Hero,
-    CategoryShowcase,
+    BrandShowcase,
     CategoryFilter,
     ProductGrid,
     BrandBanner,
@@ -39,6 +39,7 @@ export class StorefrontPage {
   readonly loading = this.productService.loading;
 
   activeCategory = signal<CategoryOrAll>('todos');
+  activeBrand = signal<string>('todos');
   searchQuery = signal('');
 
   constructor() {
@@ -50,7 +51,11 @@ export class StorefrontPage {
   readonly filteredProducts = computed(() => {
     const products = this.products();
     const category = this.activeCategory();
+    const brand = this.activeBrand();
     let list = category === 'todos' ? products : products.filter((p) => p.category === category);
+    if (brand !== 'todos') {
+      list = list.filter((p) => p.brand === brand);
+    }
     const query = this.searchQuery().trim().toLowerCase();
     if (query) {
       list = list.filter((p) => p.name.toLowerCase().includes(query));

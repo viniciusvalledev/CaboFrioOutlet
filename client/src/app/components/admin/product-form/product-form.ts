@@ -34,6 +34,7 @@ export class ProductForm implements OnInit {
 
   name = signal('');
   category = signal<ProductCategory>('camisas');
+  brand = signal('');
   price = signal('');
   discountPercent = signal('');
   description = signal('');
@@ -50,6 +51,7 @@ export class ProductForm implements OnInit {
     if (!product) return;
     this.name.set(product.name);
     this.category.set(product.category);
+    this.brand.set(product.brand ?? '');
     this.price.set(String(product.price));
     this.discountPercent.set(product.discountPercent ? String(product.discountPercent) : '');
     this.description.set(product.description);
@@ -131,6 +133,7 @@ export class ProductForm implements OnInit {
     this.formSubmit.emit({
       name: this.name().trim(),
       category: this.category(),
+      brand: this.brand().trim() || undefined,
       price: priceNum,
       image: this.image(),
       description: this.description().trim(),

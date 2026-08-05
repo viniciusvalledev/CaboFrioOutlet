@@ -12,6 +12,7 @@ model Product {
   name            String
   price           Float
   category        String
+  brand           String?
   image           String
   description     String        @db.Text
   isNew           Boolean       @default(false)

@@ -5,6 +5,14 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Oswald', 'Inter', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        accent: {
+          DEFAULT: '#FFC700',
+          hover: '#E6B400',
+        },
       },
       animation: {
         'slide-in': 'slide-in 0.3s ease-out',

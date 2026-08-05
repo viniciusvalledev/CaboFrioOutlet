@@ -4,6 +4,7 @@ export interface ProductInput {
   name: string;
   price: number;
   category: ProductCategory;
+  brand?: string;
   image: string;
   description: string;
   sizes: string[];

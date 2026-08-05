@@ -47,6 +47,24 @@
       />
     </div>
 
+    <div>
+      <label class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-400">
+        Marca
+      </label>
+      <input
+        [value]="brand()"
+        (input)="brand.set($any($event.target).value)"
+        placeholder="Ex: Nike, Adidas, High..."
+        list="brand-suggestions"
+        class="w-full rounded-lg border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-yellow-400 focus:outline-none"
+      />
+      <datalist id="brand-suggestions">
+        <option value="Nike"></option>
+        <option value="Adidas"></option>
+        <option value="High"></option>
+      </datalist>
+    </div>
+
     <div class="grid grid-cols-2 gap-4">
       <div>
         <label class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-400">

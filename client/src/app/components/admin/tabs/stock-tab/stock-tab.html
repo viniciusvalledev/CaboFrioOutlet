@@ -40,7 +40,7 @@
                     <label class="flex items-center gap-1.5 rounded-full border border-slate-700 py-1 pl-3 pr-1.5 text-xs text-slate-300">
                       {{ size }}
                       <app-stock-input
-                        [value]="product.stock[size] ?? 0"
+                        [value]="stockOf(product.stock, size)"
                         [onCommit]="makeCommitHandler(product.id, size)"
                       />
                     </label>
